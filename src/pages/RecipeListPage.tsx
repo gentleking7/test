@@ -39,7 +39,7 @@ function RecipeRow({ recipe }: RecipeRowProps) {
             {recipe.name}
           </p>
           <div style={{ fontSize: '10px', marginTop: '-7px', color: 'grey' }}><br />외식비용: {recipe.outcost} <span style={{ fontSize: '10px', color: 'black' }}>vs 요리비용: {recipe.selfcost}</span></div>
-          <div style={{ fontSize: '12px', marginTop: '-12px', color: 'red' }}><br />절약금액: {recipe.outcost - recipe.selfcost}↓</div>
+          <div style={{ fontSize: '12px', marginTop: '-12px', color: 'red' }}><br />절약금액: {(recipe.outcost - recipe.selfcost).toLocaleString()}↓</div>
           <div style={{ fontSize: '10px', marginTop: '-3px', color: 'grey' }}><br />{`${recipe.level} | ${recipe.time}`}</div>
         </Grid>
       </Grid>

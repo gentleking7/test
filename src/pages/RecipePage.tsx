@@ -2,49 +2,32 @@ import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import './RecipePage.css';
 
-// import HomeIcon from '@mui/icons-material/Home';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'; // 1) 요약
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'; // 2) 공유
-import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined'; // 3) 책갈피
-// import CollectionsBookmarkOutlinedIcon from '@mui/icons-material/CollectionsBookmarkOutlined'; // 3) 책갈피
-import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined'; // 4) 노트보기
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
-import {
-  Box,
-
-  Button,
-  Divider,
-  Grid,
-} from '@mui/material';
-
+import { Box, Button, Divider, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import {
-  RECIPE_PAGE_PATH,
-  // HOME_PAGE_PATH,
-  // STYLES_PAGE_PATH,
-  // REPORT_PAGE_PATH,
-} from '../App';
+import { RECIPE_PAGE_PATH } from '../App';
 import { useGetRecipesQuery } from '../app/newsApi';
-import { Recipe } from '../app/types';
 
 function RecipeDetails() {
   const { pathname } = useLocation();
   const parts = pathname.split('/');
   const navigate = useNavigate();
   const { data, isLoading } = useGetRecipesQuery({ id: 1 });
-  // console.log(data);
+
   if (isLoading || !data) {
     return (
-      <Box sx={{
-        p: 3, textAlign: 'center'
-      }}>
+      <Box sx={{ p: 3, textAlign: 'center' }}>
         <CircularProgress />
-      </Box >
+      </Box>
     );
   }
 
-  const recipeId = parseInt(parts[parts.length - 1]); // FIXME
-  const recipe = data[0] // .filter((recipe) => recipe.id == recipeId)[0]; // FIXME
+  const recipeId = parseInt(parts[parts.length - 1]);
+  const recipe = data[0];
 
   return (
     <div>
@@ -54,12 +37,8 @@ function RecipeDetails() {
         </div>
       </div>
       <div className='recipe-details'>
-        <p>
-          심심함을 달래기 위한 텍스트
-        </p>
-        <h1>
-          {recipe.name}
-        </h1>
+        <p>심심함을 달래기 위한 텍스트</p>
+        <h1>{recipe.name}</h1>
         <Grid container>
           <Grid item xs={3}>
             <h3>난이도</h3>
@@ -90,94 +69,56 @@ function RecipeDetails() {
         </Grid>
         <Divider />
         <Grid container>
-          <Grid item xs={6}>
-          </Grid>
+          <Grid item xs={6}></Grid>
           <Grid item xs={6}>
             <Button onClick={(e) => navigate(RECIPE_PAGE_PATH + `?ingredients=${recipe.ingredients.join(',')}`)}>
               <h3>남은 재료 레시피</h3>
             </Button>
+            
+            {/* "유투브로 이동" 버튼 스타일을 수정하고 애니메이션을 적용합니다. */}
+            <Button
+              onClick={() => window.location.href = 'https://www.youtube.com'}
+              className="blinking-button" // blinking-button 클래스 추가
+              style={{ color: 'red', fontWeight: 'bold', fontSize: '1.2em', margin: '0 auto' }}
+            >
+              노래로 듣기♬
+            </Button>
           </Grid>
         </Grid>
         <Grid container>
-          {
-            recipe.ingredients.map((ingredient, i) => {
-              return (
-                <Grid item xs={6}>
-                  <h3>{ingredient.name}</h3>
-                  <p>{ingredient.amount}</p>
-                </Grid>
-              );
-            })
-          }
+          {recipe.ingredients.map((ingredient, i) => {
+            return (
+              <Grid item xs={6}>
+                <h3>{ingredient.name}</h3>
+                <p>{ingredient.amount}</p>
+              </Grid>
+            );
+          })}
         </Grid>
         <Divider />
         <Grid container>
-          {
-            recipe.steps.map((step, i) => {
-              return (
-                <React.Fragment>
-                  <Grid xs={3}>
-                    <h3>Step {i + 1}</h3>
-                  </Grid>
-                  <Grid xs={9}>
-                    <p>{step}</p>
-                  </Grid>
-                </React.Fragment>
-              );
-            })
-          }
+          {recipe.steps.map((step, i) => {
+            return (
+              <React.Fragment>
+                <Grid xs={3}>
+                  <h3>Step {i + 1}</h3>
+                </Grid>
+                <Grid xs={9}>
+                  <p>{step}</p>
+                </Grid>
+              </React.Fragment>
+            );
+          })}
         </Grid>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 }
 
-function RecipePageFooter() {
-  // const navigate = useNavigate();
-  return (
-    <Grid container className='Footer'>
-      <Grid item xs={3} spacing={2}>
-        <div>
-          <DescriptionOutlinedIcon sx={{ fontSize: '32px' }} />
-        </div>
-        <div>
-          요약
-        </div>
-      </Grid>
-      <Grid item xs={3} spacing={2}>
-        <div>
-          <ShareOutlinedIcon sx={{ fontSize: '32px' }} />
-        </div>
-        <div>
-          공유
-        </div>
-      </Grid>
-      <Grid item xs={3} spacing={2}>
-        <div>
-          <BookmarkBorderOutlinedIcon sx={{ fontSize: '32px' }} />
-        </div>
-        <div>
-          책갈피
-        </div>
-      </Grid>
-      <Grid item xs={3} spacing={2}>
-        <div>
-          <TextsmsOutlinedIcon sx={{ fontSize: '32px' }} />
-        </div>
-        <div>
-          노트보기
-        </div>
-      </Grid>
-    </Grid>
-  );
-};
-
 export default function RecipePage() {
-
   return (
     <div>
       <RecipeDetails />
-      <RecipePageFooter />
     </div>
   );
 }
